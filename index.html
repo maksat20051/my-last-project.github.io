@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>For You 🤍</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        /* =========================
+           ПЕРВАЯ НАДПИСЬ
+        ========================= */
+
+        .intro {
+            position: fixed;
+            inset: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+            font-size: 34px;
+            letter-spacing: 1px;
+
+            background: #000;
+
+            z-index: 10;
+
+            animation: introOut 3s ease forwards;
+        }
+
+        @keyframes introOut {
+            0% {
+                opacity: 0;
+            }
+
+            25% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+
+        /* =========================
+           ВИДЕО
+        ========================= */
+
+        .video {
+            position: fixed;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            background: #000;
+
+            opacity: 0;
+
+            animation: videoIn 1.5s ease forwards;
+            animation-delay: 2.5s;
+        }
+
+        @keyframes videoIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+
+        /* =========================
+           ЭКРАН ДО ВИДЕО
+        ========================= */
+
+        .start-screen {
+            position: fixed;
+            inset: 0;
+
+            background: #000;
+
+            z-index: 20;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-direction: column;
+
+            color: white;
+
+            transition: opacity 0.8s ease;
+        }
+
+        .start-button {
+            border: none;
+
+            width: 70px;
+            height: 70px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            font-size: 28px;
+
+            cursor: pointer;
+        }
+
+        .start-text {
+            margin-top: 20px;
+
+            font-size: 15px;
+
+            opacity: 0.7;
+        }
+
+
+        /* =========================
+           ФИНАЛ
+        ========================= */
+
+        .final {
+            position: fixed;
+            inset: 0;
+
+            background: #000;
+
+            z-index: 30;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            font-size: 25px;
+            line-height: 1.6;
+
+            padding: 30px;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: opacity 2s ease;
+        }
+
+        .final.show {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <!--
+        ПЕРВОЕ, ЧТО ОНА УВИДИТ
+    -->
+
+    <div class="intro">
+        For you 🤍
+    </div>
+
+
+    <!--
+        ВИДЕО
+
+        muted нужен только для автоматического запуска.
+        После нажатия звук включается.
+    -->
+
+    <video
+        id="video"
+        class="video"
+        autoplay
+        muted
+        playsinline
+        preload="auto">
+
+        <source src="video.mp4" type="video/mp4">
+
+    </video>
+
+
+    <!--
+        ОТДЕЛЬНЫЙ ЭКРАН.
+        НИКАКИХ КНОПОК ПОВЕРХ ВИДЕО.
+    -->
+
+    <div
+        id="startScreen"
+        class="start-screen">
+
+        <button
+            id="startButton"
+            class="start-button">
+
+            🤍
+
+        </button>
+
+        <div class="start-text">
+            tap to continue
+        </div>
+
+    </div>
+
+
+    <!--
+        ПОСЛЕ ОКОНЧАНИЯ ВИДЕО
+    -->
+
+    <div
+        id="final"
+        class="final">
+
+        <div>
+            Some words are meant<br>
+            to be heard.<br><br>
+
+            And some are meant<br>
+            to be felt. 🤍
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const video = document.getElementById("video");
+        const startScreen = document.getElementById("startScreen");
+        const startButton = document.getElementById("startButton");
+        const final = document.getElementById("final");
+
+
+        /*
+            После нажатия:
+
+            1. включаем звук
+            2. запускаем видео
+            3. убираем стартовый экран
+        */
+
+        startButton.addEventListener("click", function () {
+
+            video.muted = false;
+            video.volume = 1;
+
+            video.currentTime = 0;
+
+            video.play();
+
+            startScreen.style.opacity = "0";
+
+            setTimeout(function () {
+                startScreen.style.display = "none";
+            }, 800);
+
+        });
+
+
+        /*
+            После окончания видео
+        */
+
+        video.addEventListener("ended", function () {
+
+            final.classList.add("show");
+
+        });
+
+    </script>
+
+</body>
+</html>
